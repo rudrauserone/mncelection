@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Election Intelligence – SaaS Admin</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+ --nda:#f97316;--mva:#2563eb;
+ --fav:#16a34a;--battle:#facc15;--hard:#dc2626;
+ --bg:#f8fafc;--card:#fff;--border:#e5e7eb;
+}
+*{box-sizing:border-box;font-family:Inter}
+body{margin:0;background:var(--bg);color:#111827}
+
+header{
+ background:#fff;border-bottom:1px solid var(--border);
+ padding:18px 24px;font-size:22px;font-weight:700
+}
+
+.main{max-width:1500px;margin:auto;padding:24px}
+
+/* TABS */
+.tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.tab{
+ padding:10px 18px;border-radius:999px;
+ background:#fff;border:1px solid var(--border);
+ font-weight:600;cursor:pointer
+}
+.tab.active{background:#111827;color:#fff}
+
+/* SUMMARY */
+.summary{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+ gap:16px;margin-bottom:24px
+}
+.stat{
+ background:#fff;border:1px solid var(--border);
+ border-radius:16px;padding:18px
+}
+.stat h3{margin:0;font-size:14px;color:#6b7280}
+.stat p{margin-top:6px;font-size:26px;font-weight:700}
+
+/* GRID */
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+ gap:18px
+}
+.card{
+ background:#fff;border:1px solid var(--border);
+ border-radius:18px;padding:18px;
+ cursor:pointer;transition:.2s
+}
+.card:hover{transform:translateY(-4px)}
+
+.status{
+ padding:4px 12px;font-size:12px;
+ border-radius:999px;color:#fff;font-weight:600
+}
+
+/* BAR */
+.bar{
+ height:16px;background:#e5e7eb;
+ border-radius:10px;overflow:hidden;
+ position:relative;margin-top:10px
+}
+.nda{height:100%;background:var(--nda)}
+.mva{height:100%;background:var(--mva)}
+.center{position:absolute;left:50%;width:2px;height:100%;background:#000;opacity:.3}
+
+/* MODAL */
+.modal{
+ position:fixed;inset:0;background:#fff;
+ display:none;z-index:200;overflow:auto
+}
+.modal.active{display:block}
+.modal-header{
+ padding:18px 24px;border-bottom:1px solid var(--border);
+ display:flex;justify-content:space-between;align-items:center
+}
+.close{font-size:22px;cursor:pointer}
+
+/* CANDIDATES */
+.candidates{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+ gap:12px;margin-top:18px
+}
+.candidate{
+ background:#f9fafb;border:1px solid var(--border);
+ border-radius:14px;padding:12px;
+ display:flex;justify-content:space-between
+}
+
+/* ACTION */
+.action{
+ margin-top:24px;background:#ecfeff;
+ border:1px solid #67e8f9;
+ border-radius:16px;padding:18px
+}
+</style>
+</head>
+
+<body>
+
+<header>🗳 MNC Election Intelligence –  Dashboard</header>
+
+<div class="main">
+ <div class="tabs" id="tabs"></div>
+ <div class="summary" id="summary"></div>
+ <div class="grid" id="grid"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+ <div class="modal-header">
+  <h2 id="mWard"></h2>
+  <div class="close" onclick="closeModal()">✕</div>
+ </div>
+ <div class="main">
+  <p id="mSeat"></p>
+  <span class="status" id="mStatus"></span>
+
+  <div class="bar">
+   <div class="nda" id="mNDA"></div>
+   <div class="mva" id="mMVA"></div>
+   <div class="center"></div>
+  </div>
+
+  <canvas id="chart" height="120"></canvas>
+
+  <h3>👤 उमेदवार</h3>
+  <div class="candidates" id="candidates"></div>
+
+  <div class="action">
+   <h3>🎯 विजयासाठी कृती आराखडा</h3>
+   <ul>
+    <li>कमकुवत बूथमध्ये संघटन वाढवा</li>
+    <li>स्विंग मतदारांवर लक्ष केंद्रित करा</li>
+    <li>स्थानिक प्रश्नांवर प्रचार करा</li>
+   </ul>
+  </div>
+ </div>
+</div>
+
+<script>
+const assemblies=[
+{
+ name:"Central Assembly",
+ wards:[
+  {w:"Ward 1 – मध्य नगर",s:"Central Nagar",nda:58,mva:42,
+   c:[["🪷 BJP","अमित शर्मा",58],["✋ Congress","रवी पाटील",30],["🦁 शिवसेना","महेश मोरे",12]]},
+  {w:"Ward 2 – शिवाजी चौक",s:"Shivaji Chowk",nda:46,mva:54,
+   c:[["🪷 BJP","किरण जोशी",46],["✋ Congress","इमरान शेख",38],["⏰ NCP","प्रकाश पवार",16]]},
+  {w:"Ward 3 – गांधी रोड",s:"Gandhi Road",nda:62,mva:38,
+   c:[["🪷 BJP","नीरज मेहता",62],["✋ Congress","सुनील वर्मा",26],["🐘 BSP","अरविंद काळे",12]]}
+ ]
+},
+{
+ name:"North Assembly",
+ wards:[
+  {w:"Ward 4 – नेहरू कॉलनी",s:"Nehru Colony",nda:55,mva:45,
+   c:[["🪷 BJP","अनिल कुलकर्णी",55],["✋ Congress","दीपक मोरे",30],["🦁 शिवसेना","सचिन पाटील",15]]},
+  {w:"Ward 5 – मार्केट एरिया",s:"Market Area",nda:49,mva:51,
+   c:[["🪷 BJP","राहुल जैन",49],["✋ Congress","इकबाल शेख",34],["🐘 BSP","निलेश कांबळे",17]]},
+  {w:"Ward 6 – लेक व्ह्यू",s:"Lake View",nda:60,mva:40,
+   c:[["🪷 BJP","रोहित देसाई",60],["✋ Congress","आकाश वर्मा",28],["⏰ NCP","मनोज पाटील",12]]}
+ ]
+},
+{
+ name:"South Assembly",
+ wards:[
+  {w:"Ward 7 – स्टेशन रोड",s:"Station Road",nda:57,mva:43,
+   c:[["🪷 BJP","संदीप जोशी",57],["✋ Congress","अमोल पाटील",30],["⏰ NCP","राजेश पवार",13]]},
+  {w:"Ward 8 – औद्योगिक परिसर",s:"Industrial Area",nda:52,mva:48,
+   c:[["🪷 BJP","प्रवीण देशमुख",52],["✋ Congress","इरफान खान",35],["🐘 BSP","विजय कांबळे",13]]},
+  {w:"Ward 9 – नदी किनारा",s:"River Front",nda:63,mva:37,
+   c:[["🪷 BJP","मिलिंद कुलकर्णी",63],["✋ Congress","संदीप शिंदे",25],["🦁 शिवसेना","प्रकाश पाटील",12]]}
+ ]
+}
+];
+
+const tabs=document.getElementById("tabs");
+const grid=document.getElementById("grid");
+const summary=document.getElementById("summary");
+
+let active="OVERALL";
+
+tabs.innerHTML=`<div class="tab active" onclick="setView('OVERALL')">Overall</div>`+
+ assemblies.map((a,i)=>`<div class="tab" onclick="setView(${i})">${a.name}</div>`).join("");
+
+function status(w){
+ return w.nda>=50?["Favourable","var(--fav)"]:
+        w.nda>=40?["Battlefield","var(--battle)"]:
+        ["Difficult","var(--hard)"];
+}
+
+function setView(v){
+ active=v;
+ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+ event.target.classList.add("active");
+ render();
+}
+
+function render(){
+ grid.innerHTML="";
+ let wards=[];
+ if(active==="OVERALL"){
+  assemblies.forEach(a=>wards.push(...a.wards));
+ }else{
+  wards=assemblies[active].wards;
+ }
+
+ let f=0,b=0,d=0;
+ wards.forEach(w=>{
+  const [s,c]=status(w);
+  if(s=="Favourable")f++;else if(s=="Battlefield")b++;else d++;
+
+  const card=document.createElement("div");
+  card.className="card";
+  card.innerHTML=`
+   <strong>${w.w}</strong><br>
+   <small>${w.s}</small><br><br>
+   <span class="status" style="background:${c}">${s}</span>
+   <div class="bar">
+    <div class="nda" style="width:${w.nda}%"></div>
+    <div class="mva" style="width:${w.mva}%"></div>
+    <div class="center"></div>
+   </div>
+  `;
+  card.onclick=()=>openModal(w,s,c);
+  grid.appendChild(card);
+ });
+
+ summary.innerHTML=`
+  <div class="stat"><h3>Total Wards</h3><p>${wards.length}</p></div>
+  <div class="stat"><h3>Favourable</h3><p>${f}</p></div>
+  <div class="stat"><h3>Battlefield</h3><p>${b}</p></div>
+  <div class="stat"><h3>Difficult</h3><p>${d}</p></div>
+ `;
+}
+
+let chart;
+function openModal(w,s,c){
+ modal.classList.add("active");
+ mWard.textContent=w.w;
+ mSeat.textContent=w.s;
+ mStatus.textContent=s;
+ mStatus.style.background=c;
+ mNDA.style.width=w.nda+"%";
+ mMVA.style.width=w.mva+"%";
+
+ candidates.innerHTML=w.c.map(x=>
+  `<div class="candidate"><div>${x[0]} – ${x[1]}</div><strong>${x[2]}%</strong></div>`
+ ).join("");
+
+ if(chart)chart.destroy();
+ chart=new Chart(chartEl,{
+  type:"line",
+  data:{
+   labels:["-4","-3","-2","-1","आज"],
+   datasets:[
+    {label:"NDA",data:[w.nda-6,w.nda-4,w.nda-2,w.nda-1,w.nda],borderColor:"orange"},
+    {label:"MVA",data:[w.mva+6,w.mva+4,w.mva+2,w.mva+1,w.mva],borderColor:"blue"}
+   ]
+  },
+  options:{scales:{y:{min:0,max:100}}}
+ });
+}
+function closeModal(){modal.classList.remove("active")}
+
+render();
+</script>
+
+</body>
+</html>
