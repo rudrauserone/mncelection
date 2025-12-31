@@ -9,165 +9,181 @@
 
 <style>
 :root{
- --primary:#f97316;       /* Orange */
- --secondary:#86efac;     /* Light Green */
- --secondary-dark:#16a34a;
- --bg:#f8fafc;
+ --orange:#f97316;
+ --green:#16a34a;
+ --bg:#f1f5f9;
  --card:#ffffff;
- --border:#e5e7eb;
- --dark:#0f172a;
+ --black:#000;
  --muted:#475569;
 }
 
-*{box-sizing:border-box;font-family:'Anek Devanagari',sans-serif}
-body{margin:0;background:var(--bg);color:var(--dark)}
+*{box-sizing:border-box;font-family:'Anek Devanagari',sans-serif;}
+body{margin:0;background:var(--bg);color:#0f172a}
 
 header{
- background:linear-gradient(90deg,var(--primary),var(--secondary-dark));
+ position:sticky;
+ top:0;
+ z-index:100;
+ background:linear-gradient(90deg,var(--orange),var(--green));
  color:#fff;
- padding:22px 28px;
- font-size:24px;
+ padding:22px 32px;
+ font-size:26px;
  font-weight:700;
- letter-spacing:.3px
+ box-shadow:0 4px 20px rgba(0,0,0,.15);
 }
 
 .main{
  max-width:1600px;
  margin:auto;
- padding:30px
+ padding:28px;
 }
 
 /* TABS */
 .tabs{
  display:flex;
- gap:14px;
- margin-bottom:28px
+ gap:12px;
+ margin-bottom:24px;
 }
 .tab{
- padding:10px 24px;
- border-radius:999px;
+ padding:10px 22px;
+ border-radius:5px;
  background:#fff;
- border:1px solid var(--border);
  cursor:pointer;
  font-weight:600;
- transition:.2s
+ box-shadow:0 2px 8px rgba(0,0,0,.08);
+ transition:.2s;
 }
 .tab.active{
- background:var(--primary);
+ background:var(--orange);
  color:#fff;
- border-color:var(--primary)
+ box-shadow:0 6px 16px rgba(249,115,22,.45);
 }
 
 /* GRID */
 .grid{
  display:grid;
- grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
- gap:24px
+ grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+ gap:20px;
 }
 
 /* CARD */
 .card{
- background:linear-gradient(180deg,#ffffff,#f0fdf4);
- border-radius:22px;
- padding:24px;
- border:1px solid var(--border);
+ background:var(--card);
+ border:none;
+ border-radius:12px;
+ padding:18px;
  cursor:pointer;
- transition:.25s;
- position:relative
+ transition:.2s;
+ box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
-.card::after{
- content:"";
- position:absolute;
- inset:0;
- border-radius:22px;
- box-shadow:0 14px 32px rgba(22,163,74,.08);
- opacity:0;
- transition:.25s
+.card:hover{
+ transform:translateY(-3px);
+ box-shadow:0 18px 35px rgba(0,0,0,.12);
 }
-.card:hover::after{opacity:1}
-.card:hover{transform:translateY(-4px)}
 
-.card strong{
- font-size:18px;
- font-weight:700
-}
+.card strong{font-size:17px;}
 .card p{
- margin:12px 0 0;
- font-size:14.5px;
+ margin-top:10px;
+ font-size:14px;
  color:var(--muted);
- line-height:1.65
+ line-height:1.5;
 }
 
-/* MODALS */
+/* MODAL */
 .modal{
  position:fixed;
  inset:0;
- background:#fff;
+ background:var(--bg);
  display:none;
  z-index:200;
- overflow:auto
+ overflow:auto;
 }
-.modal.active{display:block}
+.modal.active{display:block;}
 
 .modal-header{
- padding:22px 28px;
- border-bottom:1px solid var(--border);
+ padding:18px 24px;
+ border-bottom:1px solid var(--black);
  display:flex;
  justify-content:space-between;
- align-items:center
+ align-items:center;
+ background:#fff;
+ box-shadow:0 6px 16px rgba(0,0,0,.1);
 }
-.close{
- font-size:26px;
- cursor:pointer
-}
+.close{font-size:24px;cursor:pointer}
 
 /* SEATS */
 .seats{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
- gap:20px;
- margin-top:28px
+ gap:18px;
+ margin-top:24px;
 }
 .seat{
+ border:none;
+ border-radius:12px;
+ padding:16px;
  background:#f0fdf4;
- border:1px solid #bbf7d0;
- border-radius:18px;
- padding:20px;
  cursor:pointer;
- transition:.2s
+ box-shadow:0 6px 14px rgba(0,0,0,.1);
+ transition:.2s;
 }
-.seat:hover{
- background:#ecfdf5;
- transform:translateY(-2px)
-}
+.seat:hover{background:#ecfdf5; transform:translateY(-2px);}
 
+/* BADGE */
 .badge{
  display:inline-block;
- padding:6px 14px;
- font-size:13px;
- border-radius:999px;
+ padding:5px 10px;
+ border-radius:5px;
  background:#dcfce7;
- color:#166534;
- margin-bottom:8px
+ font-size:13px;
+ margin-bottom:6px;
 }
 
-/* BOXES */
+/* TABLE */
+table{
+ width:100%;
+ border-collapse:collapse;
+ margin-top:14px;
+ font-size:14px;
+}
+th,td{
+ border:1px solid var(--black);
+ padding:6px 8px;
+ text-align:left;
+}
+th{
+ background:#f97316;
+ color:#fff;
+ font-weight:600;
+}
+
+/* BOX */
 .box{
- margin-top:28px;
- border-radius:20px;
- padding:22px
-}
-.action{
- background:#f0fdf4;
- border:1px solid #86efac
-}
-.tracker{
- background:#fff7ed;
- border:1px solid #fed7aa
+ margin-top:22px;
+ border-radius:14px;
+ padding:18px;
+ background:#fff;
+ box-shadow:0 12px 28px rgba(0,0,0,.1);
 }
 
-ul{padding-left:18px}
-li{margin-bottom:6px}
+/* ACTION & TRACKER */
+.action{background:#f0fdf4;}
+.tracker{background:#fff7ed;}
+
+/* MERGED TOP CANDIDATE BAR */
+.merged-bar{
+ display:flex;
+ height:30px;
+ width:100%;
+ border-radius:8px;
+ overflow:hidden;
+ font-weight:600;
+ color:#fff;
+ margin-top:8px;
+ box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.fill-a{background:#f97316; display:flex; align-items:center; justify-content:center;}
+.fill-b{background:#16a34a; display:flex; align-items:center; justify-content:center;}
 </style>
 </head>
 
@@ -176,6 +192,7 @@ li{margin-bottom:6px}
 <header>🏙 Municipal Corporation – Election Intelligence Dashboard</header>
 
 <div class="main">
+
  <div class="tabs">
   <div class="tab active" onclick="setAssembly(1)">Assembly 1 (Ward 1–9)</div>
   <div class="tab" onclick="setAssembly(2)">Assembly 2 (Ward 10–15)</div>
@@ -203,49 +220,72 @@ li{margin-bottom:6px}
  </div>
 
  <div class="main">
+
   <canvas id="trendChart" height="120"></canvas>
+
+  <!-- Top Candidate Merged Bar -->
+  <div class="box">
+   <h3>🏆 Top Candidates (Vote Share %)</h3>
+   <div id="topCandidatesBar"></div>
+  </div>
+
+  <!-- Candidate Table -->
+  <div class="box">
+   <h3>👥 Candidate List</h3>
+   <table id="candidateTable"></table>
+  </div>
 
   <div class="box action">
    <h3>🎯 विजयासाठी कृती आराखडा</h3>
    <ul>
     <li>प्रभागनिहाय मतदार संपर्क वाढवा</li>
-    <li>महिला व ज्येष्ठ नागरिकांसाठी सुविधा मुद्दे</li>
-    <li>स्थानिक नागरी प्रश्नांवर संवाद</li>
+    <li>महिला व युवक संवाद मोहिमा</li>
+    <li>स्थानिक नागरी मुद्दे अधोरेखित करा</li>
    </ul>
-   <strong>Consultant Remark:</strong>
-   <p>हा प्रभाग महापालिका पातळीवर संवेदनशील आहे. सातत्यपूर्ण उपस्थिती आवश्यक.</p>
   </div>
 
   <div class="box tracker">
-   <h3>📊 Daily Field & Survey Inputs</h3>
+   <h3>📊 Daily Campaign Inputs</h3>
    <ul>
-    <li>Household interactions today: 455</li>
-    <li>Local meetings conducted: 5</li>
-    <li>Active volunteers: 29</li>
-    <li>Key civic issues: Water supply, Roads, Drainage</li>
+    <li>Household interactions: 420</li>
+    <li>Booth meetings: 4</li>
+    <li>Active volunteers: 31</li>
+    <li>Main issues: Water, Roads, Drainage</li>
    </ul>
   </div>
+
  </div>
 </div>
 
 <script>
 const wardSummaries=[
-"शिवाजीनगर, डेक्कन जिमखाना ",
-"पुणे सेंट्रल",
-"सदाशिव पेठ ",
-"कसबा पेठ ",
-"बाणेर ",
-"बालेवाडी ",
-"हडपसर ",
-"शिवाजीनगर, डेक्कन जिमखाना ",
-"पुणे सेंट्रल",
-"सदाशिव पेठ ",
-"कसबा पेठ ",
-"बाणेर ",
-"बालेवाडी ",
-"हडपसर ",
-"सदाशिव पेठ "
+ "दाट लोकवस्तीचा प्रभाग. पाणी व रस्ते मुद्दे.",
+ "व्यापारी भाग. स्वच्छता व पार्किंग समस्या.",
+ "मिश्र लोकसंख्या. आरोग्य सुविधा महत्त्वाची.",
+ "जुना रहिवासी भाग. नागरी सेवा अपेक्षा.",
+ "नवीन वसाहती. पायाभूत सुविधा प्रश्न.",
+ "झोपडपट्टी क्षेत्र प्रभावी.",
+ "महिला मतदार प्रभावी.",
+ "शैक्षणिक संस्था असलेला भाग.",
+ "व्यावसायिक व निवासी मिश्र.",
+ "औद्योगिक परिसर.",
+ "नवीन विस्तार क्षेत्र.",
+ "जुना बाजार भाग.",
+ "नदीकाठ भाग.",
+ "नगरविकास कामे सुरू.",
+ "शहर सीमेवरील भाग."
 ];
+
+const parties=["Party A","Party B","Party C","Independent","Local Front"];
+
+function genCandidates(){
+ let c=[];
+ const count=5+Math.floor(Math.random()*4);
+ for(let i=1;i<=count;i++){
+  c.push({name:`Candidate ${i}`,party:parties[Math.floor(Math.random()*parties.length)]});
+ }
+ return c;
+}
 
 const wards=[];
 for(let i=1;i<=15;i++){
@@ -253,10 +293,10 @@ for(let i=1;i<=15;i++){
   name:`Ward ${i}`,
   summary:wardSummaries[i-1],
   seats:[
-   {n:"A",cat:"SC Women"},
-   {n:"B",cat:"OBC"},
-   {n:"C",cat:"Open Women"},
-   {n:"D",cat:"Open"}
+   {n:"A",cat:"SC Women",c:genCandidates()},
+   {n:"B",cat:"OBC",c:genCandidates()},
+   {n:"C",cat:"Open Women",c:genCandidates()},
+   {n:"D",cat:"Open",c:genCandidates()}
   ]
  });
 }
@@ -273,15 +313,11 @@ function setAssembly(a){
 
 function renderWards(){
  grid.innerHTML="";
- wards
- .filter(w=>activeAsm===1?+w.name.split(" ")[1]<=9:+w.name.split(" ")[1]>9)
+ wards.filter(w=>activeAsm===1?+w.name.split(" ")[1]<=9:+w.name.split(" ")[1]>9)
  .forEach(w=>{
   const card=document.createElement("div");
   card.className="card";
-  card.innerHTML=`
-   <strong>${w.name}</strong>
-   <p>${w.summary}</p>
-  `;
+  card.innerHTML=`<strong>${w.name}</strong><p>${w.summary}</p>`;
   card.onclick=()=>openWard(w);
   grid.appendChild(card);
  });
@@ -294,9 +330,6 @@ function openWard(w){
   <div class="seat" onclick='openSeat("${w.name}","${s.n}","${s.cat}")'>
    <span class="badge">${s.cat}</span><br>
    Seat ${s.n}
-   <div style="margin-top:6px;font-size:13px;color:#475569">
-    Ward-level intelligence available
-   </div>
   </div>
  `).join("");
 }
@@ -308,19 +341,36 @@ function openSeat(ward,seat,cat){
  seatModal.classList.add("active");
  seatTitle.textContent=`${ward} – Seat ${seat} (${cat})`;
 
+ const seatData=wards.find(w=>w.name===ward).seats.find(s=>s.n===seat);
+
+ // Top 2 candidates with vote share
+ const sorted=[...seatData.c].slice(0,2);
+ const p1=56, p2=44; // sum must be 100
+
+ document.getElementById("topCandidatesBar").innerHTML=`
+  <div class="merged-bar">
+   <div class="fill-a" style="width:${p1}%">${sorted[0].name} ${p1}%</div>
+   <div class="fill-b" style="width:${p2}%">${p2}% ${sorted[1].name}</div>
+  </div>
+ `;
+
+ document.getElementById("candidateTable").innerHTML=
+ `<tr><th>#</th><th>Candidate Name</th><th>Party</th></tr>`+
+ seatData.c.map((x,i)=>`<tr><td>${i+1}</td><td>${x.name}</td><td>${x.party}</td></tr>`).join("");
+
  if(chart)chart.destroy();
  chart=new Chart(document.getElementById("trendChart"),{
   type:"line",
   data:{
    labels:["Day -4","Day -3","Day -2","Day -1","Today"],
    datasets:[
-    {label:"Support Trend",data:[48,50,52,53,55],borderColor:"#f97316",tension:.4},
-    {label:"Opposition Trend",data:[52,50,49,48,47],borderColor:"#16a34a",tension:.4}
+    {label:"Support",data:[48,50,52,53,56],borderColor:"#f97316",tension:.4},
+    {label:"Opposition",data:[52,50,48,47,44],borderColor:"#16a34a",tension:.4}
    ]
   },
   options:{
-   scales:{y:{min:40,max:60}},
-   plugins:{legend:{position:"bottom"}}
+   plugins:{legend:{position:"bottom"}},
+   scales:{y:{min:40,max:60}}
   }
  });
 }
